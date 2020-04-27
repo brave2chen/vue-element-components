@@ -1,16 +1,18 @@
 <template>
   <div class="app-export-demo">
-    <AppExport name="导出" filename="template.csv" :types="types" method="get"></AppExport>
+    <AppExport name="导出" filename="template.csv" :types="types"></AppExport>
+    <AppUpload name="导入" action="/template.csv" moduleFileUrl="/template.csv" moduleFileName="template.csv" accept=".csv" :size="1"></AppUpload>
   </div>
 </template>
 <script>
   // @ is an alias to /src
   import AppExport from '../components/AppExport'
+  import AppUpload from '../components/AppUpload'
 
   export default {
-    name: 'AppExportDemo',
+    name: 'AppDemos',
     components: {
-      AppExport
+      AppExport, AppUpload
     },
     data(){
       return {

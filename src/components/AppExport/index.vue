@@ -37,7 +37,7 @@
       beforeExport: {
         type: Function,
       },
-      // 导出类型数组[{label: ${导出类型名称}, uri: ${导出请求URL}, data: ${导出请求附加参数}},
+      // 导出类型数组[{label: ${导出类型名称}, uri: ${导出请求URL}, data: ${导出请求附加参数}, method: ${get|post}},
       types: {
         type: Array,
         require: true,
@@ -47,11 +47,6 @@
         type: String,
         require: true,
       },
-      // 导出请求方式，默认get
-      method: {
-        type: String,
-        default: 'post',
-      }
     },
     data() {
       return {
@@ -74,7 +69,7 @@
         }
         this.loading = true;
         // axios 添加download方法
-        await this.$axios.download(this.currentType.uri, this.currentType.data, this.filename, {method: this.method})
+        await this.$axios.download(this.currentType.uri, this.currentType.data, this.filename, {method: this.currentType.method || 'get'})
         .catch(() => {
           this.loading = false;
           this.$message.error('文件下载失败')

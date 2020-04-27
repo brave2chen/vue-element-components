@@ -41,11 +41,11 @@ Object.defineProperties(Vue.prototype, {
 })
 
 
-axios.download = async (url, data, filename, config) => {
+axios.download = async (url, data, filename, config = {}) => {
   const response = await axios.request({
     ...config,
     url: url,
-    method: config.method || 'post',
+    method: config.method || 'get',
     responseType: 'blob',
     params: data,
   })

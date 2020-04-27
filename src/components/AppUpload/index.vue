@@ -37,7 +37,7 @@
 
 <script>
   export default {
-    name: 'PUpload',
+    name: 'AppUpload',
     props: {
       /* 除以下属性外：请参考el-upload组件，如上传文件附加请求参数：data */
       // 标题名称
@@ -88,41 +88,42 @@
           this.$message.error(`上传文件只能是 ${this.accept} 格式`);
         }
         if (!isLt2M) {
-          this.$message.error(`上传头像图片大小不能超过 ${size} MB!`);
+          this.$message.error(`上传头像图片大小不能超过 ${this.size} MB!`);
         }
         return isType && isLt2M;
       },
       async download() {
         // axios 添加download方法
-        await this.$axios.download(this.currentType.uri, this.currentType.data, this.filename, {method: this.method})
-          .catch(() => {
-            this.loading = false;
+        await this.$axios.download(this.moduleFileUrl, null, this.moduleFileName)
+          .catch((e) => {
+            console.log(e)
             this.$message.error('模板文件下载失败')
             throw new Error('模板文件下载失败')
           })
       },
-      upload({filename, file, action, data = {}}) {
+      async upload({filename, file, action, data = {}}) {
         const formData = new FormData() // 创建一个对象实例
         formData.append(filename || 'file', file);
         Object.entries(data).forEach(([key, value]) => {
           value !== undefined && value !== null && formData.append(key, String(value))
         });
-        const {code, msg} = this.$axios.post(action, formData, {
+
+        return this.$axios.post(action, formData, {
           headers: {
             "Content-Type": "multipart/form-data"
           },
-        }).catch(e => {
-          this.$message.error(msg)
-          console.error(e)
-          this.onError && this.onError(e)
-        })
-        if (code !== 200) {
-          this.$message.error(msg)
+        }).then(({code, msg}) => {
+          if (code !== 200) {
+            throw new Error(msg)
+          } else {
+            this.visible = false
+            this.onSuccess && this.onSuccess()
+          }
+        }).catch((error) => {
+          this.$message.error(error.message)
           this.onError && this.onError()
-        } else {
-          this.visible = false
-          this.onSuccess && this.onSuccess()
-        }
+          console.log(error)
+        })
       },
     }
   }

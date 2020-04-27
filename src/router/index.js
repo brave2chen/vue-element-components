@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import AppExportDemo from '../views/AppExportDemo.vue'
+import AppExportDemo from '../views/AppDemos.vue'
 
 Vue.use(VueRouter)
 
